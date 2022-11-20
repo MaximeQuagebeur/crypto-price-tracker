@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import showStore from '../stores/showStore'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import Header from '../components/Header';
+import Loader from '../components/Loader';
 
 const data = [
   {
@@ -59,22 +60,21 @@ export default function Show() {
         store.fetchData(params.id)
     }, [])
 
-    // console.log(store.data);
-
-    if (store.isLoading) return <div>Loading...</div>;
+    if (store.isLoading) return <Loader />;
 
     console.log(data.isLoading);
     
     return (
     <div>
     <Header back />
-     <header>
+     <header className="show-header" >
         <img src={store.data.image.large} alt="blabla" />
         <h2>{store.data.name} ({store.data.symbol})</h2>
      </header>
+     <div className="width">
+     <div className="show-graph">
+      <ResponsiveContainer width="100%" height="100%">
          <AreaChart
-          width={500}
-          height={400}
           data={store.graphData}
           margin={{
             top: 10,
@@ -89,30 +89,39 @@ export default function Show() {
           <Tooltip />
           <Area type="monotone" dataKey="Price" stroke="#8884d8" fill="#8884d8" />
         </AreaChart>
-        <div>
-          <h4>Market cap Rank</h4>
+      </ResponsiveContainer>
+     </div>
+     </div>
+
+     <div className="show-details">
+     <div className="width">
+     <h2>Details</h2>
+        <div className="show-details-row">
+          <h3>Market cap Rank</h3>
           <span>{store.data.market_cap_rank}</span>
         </div>
-        <div>
-          <h4>24h high</h4>
+        <div className="show-details-row">
+          <h3>24h high</h3>
           <span>${store.data.market_data.high_24h.usd}</span>
         </div>
-        <div>
-          <h4>24h low</h4>
+        <div className="show-details-row">
+          <h3>24h low</h3>
           <span>${store.data.market_data.low_24h.usd}</span>
         </div>
-        <div>
-          <h4>Circulating supply</h4>
+        <div className="show-details-row">
+          <h3>Circulating supply</h3>
           <span>${store.data.market_data.circulating_supply}</span>
         </div>
-        <div>
-          <h4>Current price</h4>
+        <div className="show-details-row">
+          <h3>Current price</h3>
           <span>${store.data.market_data.current_price.usd}</span>
         </div>
-        <div>
-          <h4>1y change</h4>
+        <div className="show-details-row">
+          <h3>1y change</h3>
           <span>${store.data.market_data.price_change_percentage_1y.toFixed(2)}%</span>
         </div>
+     </div>
     </div>
+     </div>
   )
 }

@@ -6,6 +6,8 @@ const homeStore = create((set) => ({
     coins: [],
     trending: [],
     query: '',
+    searching: false,
+    searched: false,
 
     setQuery: (e) => {
         set({query: e.target.value})
@@ -13,6 +15,7 @@ const homeStore = create((set) => ({
     },
 
     searchCoins: debounce( async () => {
+        set({searching: true})
         const {query, trending} = homeStore.getState()
 
         if (query.length > 2) {
@@ -26,9 +29,9 @@ const homeStore = create((set) => ({
                 }
             })
             
-            set({coins: coins})
+            set({coins: coins, searching: false, searched: true})
         } else {
-            set({coins: trending})
+            set({coins: trending, searching: false, searched: false})
         }
     }, 500),
 
